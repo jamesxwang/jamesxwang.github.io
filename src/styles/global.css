@@ -74,6 +74,28 @@ body {
   background: var(--page);
 }
 
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 1.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    padding-top: 6rem;
+  }
+}
+
+.hero-portrait {
+  width: 11rem;
+  height: auto;
+  margin-top: 2rem;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
 .site-name {
   font-family: var(--font-hand);
   font-size: 16px;
