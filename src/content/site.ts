@@ -12,15 +12,18 @@ export const site = {
   linkedin: "https://www.linkedin.com/in/james-wang-cn/",
 };
 
+const bioLink = (href: string, label: string, logo: string, logoClass = "bio-logo") =>
+  `<span class="bio-brand"><a href="${href}" target="_blank" rel="noopener noreferrer"><img src="${logo}" alt="" aria-hidden="true" class="${logoClass}" />${label}</a></span>`;
+
 export const bio = [
   {
-    html: `I'm James, a software engineer working at <span class="bio-brand"><img src="/images/airwallex.png" alt="" aria-hidden="true" class="bio-logo" /><a href="https://www.airwallex.com/en-au/spend-management">Airwallex Spend</a></span>, based in <span class="bio-brand"><img src="/images/sydney.svg" alt="" aria-hidden="true" class="bio-logo" />Sydney</span>, Australia.`,
+    html: `I'm James, a software engineer working at ${bioLink("https://www.airwallex.com/en-au/spend-management", "Airwallex Spend", "/images/airwallex.png")}, based in ${bioLink("https://www.sydney.com/", "Sydney", "/images/sydney.svg")}, Australia.`,
   },
   {
-    html: `Before that I was a frontend engineer at <span class="bio-brand"><img src="/images/tencent-cloud.svg" alt="" aria-hidden="true" class="bio-logo" /><a href="https://www.tencentcloud.com">Tencent Cloud</a></span>.`,
+    html: `Before that I was a frontend engineer at ${bioLink("https://www.tencentcloud.com", "Tencent Cloud", "/images/tencent-cloud.svg")}.`,
   },
   {
-    html: `I hold a Master of Computer Science from the <span class="bio-brand"><img src="/images/unimelb.svg" alt="" aria-hidden="true" class="bio-logo bio-logo-unimelb" /><a href="https://study.unimelb.edu.au/find/courses/graduate/master-of-computer-science/">University of Melbourne</a></span>.`,
+    html: `I hold a Master of Computer Science from the ${bioLink("https://study.unimelb.edu.au/find/courses/graduate/master-of-computer-science/", "University of Melbourne", "/images/unimelb.svg", "bio-logo bio-logo-unimelb")}, and a B.E. in Automation from ${bioLink("https://soa.csu.edu.cn/English/Introduction/Introduction.htm", "Central South University", "/images/csu.png", "bio-logo bio-logo-csu")}.`,
   },
   {
     html: `I've spent years in the browser — and still like shipping things people can click.`,

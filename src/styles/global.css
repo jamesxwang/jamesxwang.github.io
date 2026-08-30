@@ -134,6 +134,11 @@ body {
   margin-bottom: -0.38em;
 }
 
+.bio-text .bio-logo-csu {
+  height: 1.15em;
+  margin-bottom: -0.18em;
+}
+
 .bio-text a {
   text-decoration: underline;
   text-underline-offset: 3px;
