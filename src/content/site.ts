@@ -37,7 +37,7 @@ export const timeline = [
     company: "CSU SOA",
     role: "B.E. Automation",
     href: "https://soa.csu.edu.cn/English/Introduction/Introduction.htm",
-    rise: 34,
+    rise: 38,
   },
   {
     kind: "work",
@@ -46,7 +46,7 @@ export const timeline = [
     role: "Software Engineer",
     color: "#1F8A7D",
     ink: "#ffffff",
-    rise: 70,
+    rise: 84,
   },
   {
     kind: "education",
@@ -54,7 +54,7 @@ export const timeline = [
     company: "UniMelb",
     role: "Master of Computer Science",
     href: "https://study.unimelb.edu.au/find/courses/graduate/master-of-computer-science/",
-    rise: 58,
+    rise: 72,
   },
   {
     kind: "work",
@@ -63,7 +63,7 @@ export const timeline = [
     role: "Intern",
     color: "#111111",
     ink: "#ffffff",
-    rise: 104,
+    rise: 52,
   },
   {
     kind: "work",
@@ -72,7 +72,13 @@ export const timeline = [
     role: "Full-stack Engineer",
     color: "#1E4D78",
     ink: "#ffffff",
-    rise: 76,
+    rise: 100,
+  },
+  {
+    kind: "move",
+    year: "2020",
+    label: "Moved to Shenzhen",
+    rise: 32,
   },
   {
     kind: "work",
@@ -81,13 +87,13 @@ export const timeline = [
     role: "Frontend Engineer",
     color: "#0052D9",
     ink: "#ffffff",
-    rise: 52,
+    rise: 68,
   },
   {
     kind: "move",
-    year: "2020",
-    label: "Moved to SZ, China",
-    rise: 42,
+    year: "2021",
+    label: "Moved to Shanghai",
+    rise: 86,
   },
   {
     kind: "work",
@@ -97,25 +103,25 @@ export const timeline = [
     color: "#FF4F42",
     colorEnd: "#FF8E3C",
     ink: "#ffffff",
-    rise: 88,
+    rise: 94,
   },
   {
     kind: "move",
     year: "2022",
     label: "Moved to Melbourne",
-    rise: 54,
+    rise: 40,
   },
   {
     kind: "move",
     year: "2024",
     label: "Got married",
-    rise: 62,
+    rise: 78,
   },
   {
     kind: "move",
     year: "2024",
     label: "Moved to Sydney",
-    rise: 38,
+    rise: 36,
   },
 ];
 
