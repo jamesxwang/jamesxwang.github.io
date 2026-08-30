@@ -150,13 +150,30 @@ body {
 }
 
 .section-label {
+  position: relative;
+  display: block;
+  width: fit-content;
+  margin-inline: auto;
+  padding: 0.85em 1.55em 0.75em;
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 400;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-muted);
+  color: var(--color-ink);
   text-align: center;
+}
+
+.section-label::before {
+  content: "";
+  position: absolute;
+  inset: -1.45em -1.75em -1.25em;
+  background-color: var(--color-ink);
+  opacity: 0.4;
+  pointer-events: none;
+  transform: rotate(-2.4deg);
+  -webkit-mask: url("/images/section-scribble.svg") center / 100% 100% no-repeat;
+  mask: url("/images/section-scribble.svg") center / 100% 100% no-repeat;
 }
 
 .prose {
