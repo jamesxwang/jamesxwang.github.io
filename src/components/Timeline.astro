@@ -24,6 +24,15 @@ let belowEnd = startPad;
 let lastDot = startPad - minDotGap;
 let maxRight = startPad;
 
+const isNearBlack = (color?: string) => {
+  if (!color?.startsWith("#") || color.length < 7) return false;
+  const n = parseInt(color.slice(1, 7), 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return (r + g + b) / 3 < 48;
+};
+
 const packed = timeline.map((item) => {
   const below = item.kind !== "work";
   const width = labelWidth(item);
@@ -102,7 +111,7 @@ const trackWidth = arrowLeft + 12 + startPad;
                 style={`top: ${below ? axis : dotTop}px; left: 5px; width: 1px; height: ${connectorHeight}px; border-left: 1px dashed var(--line);`}
               />
               <div
-                class="absolute rounded-sm"
+                class:list={["absolute rounded-sm", !below && isNearBlack(item.color) && "timeline-halo"]}
                 style={`top: ${dotTop}px; left: 0; transform: translateY(-50%); width: 10px; height: 10px; background: ${below ? "var(--line)" : fill};`}
               />
               <div
@@ -130,7 +139,10 @@ const trackWidth = arrowLeft + 12 + startPad;
                   <span class="text-[12px] text-muted whitespace-nowrap">{item.label}</span>
                 ) : (
                   <span
-                    class="w-fit whitespace-nowrap rounded px-2 py-0.5 text-[11px] font-medium"
+                    class:list={[
+                      "w-fit whitespace-nowrap rounded px-2 py-0.5 text-[11px] font-medium",
+                      isNearBlack(item.color) && "timeline-halo",
+                    ]}
                     style={`background: ${item.colorEnd ? fill : item.ink ? item.color : `${item.color}cc`}; color: ${item.ink ?? "#000"};`}
                   >
                     {item.company}
@@ -154,6 +166,12 @@ const trackWidth = arrowLeft + 12 + startPad;
     </div>
   </div>
 </section>
+
+<style>
+  :global(html[data-theme="dark"]) .timeline-halo {
+    box-shadow: 0 0 0 1px var(--muted);
+  }
+</style>
 
 <script>
   function initTimelinePin() {
