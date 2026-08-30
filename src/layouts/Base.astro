@@ -1,0 +1,91 @@
+---
+import Analytics from "../components/Analytics.astro";
+import Footer from "../components/Footer.astro";
+import Nav from "../components/Nav.astro";
+import { site } from "../content/site";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  showNav?: boolean;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  showNav = true,
+} = Astro.props;
+
+const pageTitle = title === site.title ? title : `${title} · ${site.name}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, site.url).href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500&family=Homemade+Apple&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+      rel="stylesheet"
+    />
+    <title>{pageTitle}</title>
+    <script is:inline>
+      (function () {
+        var key = "theme";
+        var root = document.documentElement;
+        var media = window.matchMedia("(prefers-color-scheme: dark)");
+
+        function stored() {
+          var value = localStorage.getItem(key);
+          return value === "light" || value === "dark" ? value : null;
+        }
+
+        function resolve() {
+          return stored() || (media.matches ? "dark" : "light");
+        }
+
+        function apply(theme) {
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+          var button = document.getElementById("theme-toggle");
+          if (!button) return;
+          var next = theme === "dark" ? "light" : "dark";
+          button.setAttribute("aria-label", "Switch to " + next + " mode");
+          button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+        }
+
+        apply(resolve());
+
+        document.addEventListener("click", function (event) {
+          var target = event.target;
+          if (!target || !target.closest || !target.closest("#theme-toggle")) return;
+          var next = root.dataset.theme === "dark" ? "light" : "dark";
+          localStorage.setItem(key, next);
+          apply(next);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+          apply(resolve());
+        });
+
+        media.addEventListener("change", function (event) {
+          if (stored()) return;
+          apply(event.matches ? "dark" : "light");
+        });
+      })();
+    </script>
+  </head>
+  <body class="relative flex min-h-screen min-w-0 flex-col overflow-x-clip">
+    {showNav && <Nav />}
+    <slot />
+    <Footer />
+    <Analytics />
+  </body>
+</html>

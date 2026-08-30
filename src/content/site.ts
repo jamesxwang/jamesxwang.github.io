@@ -1,0 +1,149 @@
+export const site = {
+  name: "James Wang",
+  firstName: "James",
+  lastName: "Wang",
+  title: "James Wang",
+  description:
+    "Software Engineer at Airwallex. Previously a frontend engineer at Tencent Cloud.",
+  url: "https://jamesxwang.com",
+  email: "jameswangx95@gmail.com",
+  github: "https://github.com/jamesxwang",
+  githubHandle: "jamesxwang",
+  linkedin: "https://www.linkedin.com/in/james-wang-cn/",
+};
+
+export const bio = [
+  {
+    html: `I'm James, a software engineer working at <span class="bio-brand"><img src="/images/airwallex.png" alt="" aria-hidden="true" class="bio-logo" /><a href="https://www.airwallex.com/en-au/spend-management">Airwallex Spend</a></span>, based in <span class="bio-brand"><img src="/images/sydney.svg" alt="" aria-hidden="true" class="bio-logo" />Sydney</span>, Australia.`,
+  },
+  {
+    html: `Before that I was a frontend engineer at <span class="bio-brand"><img src="/images/tencent-cloud.svg" alt="" aria-hidden="true" class="bio-logo" /><a href="https://www.tencentcloud.com">Tencent Cloud</a></span>.`,
+  },
+  {
+    html: `I hold a Master of Computer Science from the <span class="bio-brand"><img src="/images/unimelb.svg" alt="" aria-hidden="true" class="bio-logo bio-logo-unimelb" /><a href="https://study.unimelb.edu.au/find/courses/graduate/master-of-computer-science/">University of Melbourne</a></span>.`,
+  },
+  {
+    html: `I've spent years in the browser — and still like shipping things people can click.`,
+  },
+];
+
+export const timeline = [
+  {
+    kind: "education",
+    year: "2013–2017",
+    company: "CSU SOA",
+    role: "B.E. Automation",
+    href: "https://soa.csu.edu.cn/English/Introduction/Introduction.htm",
+    rise: 34,
+  },
+  {
+    kind: "work",
+    year: "2018",
+    company: "Hunan Wongxin Hi-tech Co., Ltd.",
+    role: "Intern",
+    color: "#ECA954",
+    rise: 70,
+  },
+  {
+    kind: "work",
+    year: "2018",
+    company: "Ubisoft",
+    role: "Intern",
+    color: "#111111",
+    ink: "#ffffff",
+    rise: 104,
+  },
+  {
+    kind: "education",
+    year: "2018–2020",
+    company: "UniMelb",
+    role: "Master of Computer Science",
+    href: "https://study.unimelb.edu.au/find/courses/graduate/master-of-computer-science/",
+    rise: 58,
+  },
+  {
+    kind: "work",
+    year: "2019",
+    company: "Royal Melbourne Hospital",
+    role: "Full-stack Engineer",
+    color: "#1E4D78",
+    ink: "#ffffff",
+    rise: 76,
+  },
+  {
+    kind: "work",
+    year: "2020",
+    company: "Tencent Cloud",
+    role: "Frontend Engineer",
+    color: "#0052D9",
+    ink: "#ffffff",
+    rise: 52,
+  },
+  {
+    kind: "move",
+    year: "2020",
+    label: "Moved to SZ, China",
+    rise: 42,
+  },
+  {
+    kind: "work",
+    year: "2022",
+    company: "Airwallex",
+    role: "Software Engineer",
+    color: "#FF4F42",
+    colorEnd: "#FF8E3C",
+    ink: "#ffffff",
+    rise: 88,
+  },
+  {
+    kind: "move",
+    year: "2022",
+    label: "Moved to Melbourne",
+    rise: 54,
+  },
+  {
+    kind: "move",
+    year: "2024",
+    label: "Got married",
+    rise: 62,
+  },
+  {
+    kind: "move",
+    year: "2024",
+    label: "Moved to Sydney",
+    rise: 38,
+  },
+];
+
+export const works = [
+  {
+    title: "Tencent Cloud Monitor Grafana App",
+    description: "Documentation for the Tencent Cloud Monitor Grafana plugin.",
+    href: "https://jamesxwang.com/tencentcloud-monitor-grafana-app-docs/",
+    image:
+      "https://cdn.jsdelivr.net/gh/TencentCloud/tencentcloud-monitor-grafana-app@master/src/image/plugin-app.png",
+  },
+  {
+    title: "Vue-Hotspot",
+    description: "A hotspot component for Vue.js.",
+    href: "https://github.com/jamesxwang/vue-hotspot",
+    image:
+      "https://cdn.jsdelivr.net/gh/jamesxwang/vue-hotspot@master/src/demo/assets/logo.png",
+  },
+  {
+    title: "Mini MVVM",
+    description: "A small MVVM mock-up exploring reactivity from scratch.",
+    href: "https://github.com/jamesxwang/MVVM",
+    image: "https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/mvvm/mvvm.png",
+  },
+];
+
+export const resumes = [
+  { id: "en", label: "English", subtitle: "Resume", href: "/resume/Resume.pdf" },
+  { id: "zh", label: "中文", subtitle: "简历", href: "/resume/Resume-zh.pdf" },
+];
+
+export const analytics = {
+  cnzz: "https://s4.cnzz.com/z_stat.php?id=1279680844&web_id=1279680844",
+  busuanzi: "https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js",
+};

@@ -1,0 +1,240 @@
+---
+import { timeline } from "../content/site";
+
+const minDotGap = 80;
+const sameSideGap = 40;
+const labelInset = 18;
+const startPad = 120;
+
+const monoWidth = (text: string, size: number) => [...text].length * size * 0.62;
+
+const labelWidth = (item: (typeof timeline)[number]) => {
+  const year = monoWidth(item.year, 11);
+  const company = "company" in item && item.company ? item.company : "";
+  const move = "label" in item && item.label ? item.label : "";
+  const role = "role" in item && item.role ? item.role : "";
+  const main = item.kind === "work"
+    ? monoWidth(company.toUpperCase(), 11) + 16
+    : monoWidth((move || company).toUpperCase(), 12);
+  return Math.max(year, main, role ? monoWidth(role.toUpperCase(), 12) : 0);
+};
+
+let aboveEnd = startPad;
+let belowEnd = startPad;
+let lastDot = startPad - minDotGap;
+let maxRight = startPad;
+
+const packed = timeline.map((item) => {
+  const below = item.kind !== "work";
+  const width = labelWidth(item);
+  const left = Math.max(below ? belowEnd : aboveEnd, lastDot + minDotGap);
+  lastDot = left;
+  const end = left + labelInset + width + sameSideGap;
+  if (below) belowEnd = end;
+  else aboveEnd = end;
+  maxRight = Math.max(maxRight, left + labelInset + width);
+
+  const axis = 150;
+  const connectorHeight = item.rise ?? (below ? 36 : 80);
+  const dotTop = below ? axis + connectorHeight : axis - connectorHeight;
+  const fill = item.colorEnd
+    ? `linear-gradient(135deg, ${item.color}, ${item.colorEnd})`
+    : item.color;
+
+  return { item, below, left, axis, connectorHeight, dotTop, fill };
+});
+
+const arrowLeft = maxRight + 16;
+const trackWidth = arrowLeft + 12 + startPad;
+---
+
+<section
+  class="relative w-full min-h-svh"
+  aria-label="Career timeline"
+  data-timeline
+>
+  <div
+    class="sticky top-0 flex h-svh items-center overflow-hidden py-8 md:py-12"
+    data-timeline-sticky
+  >
+    <div
+      class="relative shrink-0 will-change-transform"
+      style={`height: 300px; width: ${trackWidth}px;`}
+      data-timeline-track
+    >
+      <div
+        class="absolute bg-line"
+        data-timeline-axis
+        style={`top: 150px; left: 0; height: 1px; width: ${arrowLeft}px;`}
+      >
+      </div>
+      <svg
+        class="absolute"
+        data-timeline-arrow
+        style={`top: 145px; left: ${arrowLeft}px;`}
+        width="12"
+        height="11"
+        viewBox="0 0 12 11"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M2 1.5L10 5.5L2 9.5"
+          stroke="var(--line)"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"></path>
+      </svg>
+
+      {
+        packed.map(({ item, below, left, axis, connectorHeight, dotTop, fill }) => {
+          const isEducation = item.kind === "education";
+
+          return (
+            <div
+              class="absolute top-0 h-full"
+              data-timeline-item
+              data-side={below ? "below" : "above"}
+              style={`left: ${left}px; padding-top: ${dotTop}px;`}
+            >
+              <div
+                class="absolute"
+                style={`top: ${below ? axis : dotTop}px; left: 5px; width: 1px; height: ${connectorHeight}px; border-left: 1px dashed var(--line);`}
+              />
+              <div
+                class="absolute rounded-sm"
+                style={`top: ${dotTop}px; left: 0; transform: translateY(-50%); width: 10px; height: 10px; background: ${below ? "var(--line)" : fill};`}
+              />
+              <div
+                class="font-timeline -translate-y-1/2 flex flex-col items-start gap-0.5 uppercase"
+                data-timeline-label
+                style="margin-left: 18px;"
+              >
+                <span class="text-[11px] tracking-wide text-muted whitespace-nowrap">
+                  {item.year}
+                </span>
+                {isEducation ? (
+                  item.href ? (
+                    <a
+                      href={item.href}
+                      class="text-[12px] text-ink whitespace-nowrap underline underline-offset-2 hover:text-body transition-colors"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {item.company}
+                    </a>
+                  ) : (
+                    <span class="text-[12px] text-ink whitespace-nowrap">{item.company}</span>
+                  )
+                ) : item.kind === "move" ? (
+                  <span class="text-[12px] text-muted whitespace-nowrap">{item.label}</span>
+                ) : (
+                  <span
+                    class="w-fit whitespace-nowrap rounded px-2 py-0.5 text-[11px] font-medium"
+                    style={`background: ${item.colorEnd ? fill : item.ink ? item.color : `${item.color}cc`}; color: ${item.ink ?? "#000"};`}
+                  >
+                    {item.company}
+                  </span>
+                )}
+                {item.role && (
+                  <span
+                    class:list={[
+                      "text-[12px] whitespace-nowrap",
+                      below ? "text-muted" : "text-body",
+                    ]}
+                  >
+                    {item.role}
+                  </span>
+                )}
+              </div>
+            </div>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  function initTimelinePin() {
+    const section = document.querySelector<HTMLElement>("[data-timeline]");
+    const sticky = section?.querySelector<HTMLElement>("[data-timeline-sticky]");
+    const track = section?.querySelector<HTMLElement>("[data-timeline-track]");
+    if (!section || !sticky || !track) return;
+
+    const items = [...track.querySelectorAll<HTMLElement>("[data-timeline-item]")];
+    const axis = track.querySelector<HTMLElement>("[data-timeline-axis]");
+    const arrow = track.querySelector<HTMLElement>("[data-timeline-arrow]");
+    const minDotGap = 80;
+    const sameSideGap = 40;
+
+    const edgePad = () => Math.max(24, (window.innerWidth - 672) / 2 + 24);
+
+    const pack = () => {
+      const startPad = edgePad();
+      let aboveEnd = startPad;
+      let belowEnd = startPad;
+      let lastDot = startPad - minDotGap;
+      let maxRight = startPad;
+
+      for (const item of items) {
+        const label = item.querySelector<HTMLElement>("[data-timeline-label]");
+        const labelW = label?.offsetWidth ?? 0;
+        const below = item.dataset.side === "below";
+        const x = Math.max(below ? belowEnd : aboveEnd, lastDot + minDotGap);
+        item.style.left = `${x}px`;
+        lastDot = x;
+        const end = x + 18 + labelW + sameSideGap;
+        if (below) belowEnd = end;
+        else aboveEnd = end;
+        maxRight = Math.max(maxRight, x + 18 + labelW);
+      }
+
+      const arrowLeft = maxRight + 16;
+      if (axis) axis.style.width = `${arrowLeft}px`;
+      if (arrow) arrow.style.left = `${arrowLeft}px`;
+      track.style.width = `${arrowLeft + 12 + edgePad()}px`;
+    };
+
+    const overflow = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
+    const layout = () => {
+      pack();
+      const extra = overflow();
+      if (extra <= 1) {
+        section.style.height = "";
+        sticky.classList.remove("sticky", "top-0", "h-svh");
+        track.style.transform = "";
+        return;
+      }
+      sticky.classList.add("sticky", "top-0", "h-svh");
+      section.style.height = `${window.innerHeight + extra}px`;
+    };
+
+    const update = () => {
+      const extra = overflow();
+      if (extra <= 1) return;
+      const max = section.offsetHeight - window.innerHeight;
+      const scrolled = Math.min(Math.max(-section.getBoundingClientRect().top, 0), max);
+      const progress = max > 0 ? scrolled / max : 0;
+      track.style.transform = `translate3d(${-extra * progress}px, 0, 0)`;
+    };
+
+    const refresh = () => {
+      layout();
+      update();
+    };
+
+    const prior = (window as Window & { __timelinePinAbort?: AbortController }).__timelinePinAbort;
+    prior?.abort();
+    const ac = new AbortController();
+    (window as Window & { __timelinePinAbort?: AbortController }).__timelinePinAbort = ac;
+
+    refresh();
+    window.addEventListener("scroll", update, { passive: true, signal: ac.signal });
+    window.addEventListener("resize", refresh, { signal: ac.signal });
+    document.fonts?.ready.then(refresh);
+  }
+
+  initTimelinePin();
+</script>

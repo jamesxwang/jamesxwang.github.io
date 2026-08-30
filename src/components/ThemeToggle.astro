@@ -1,0 +1,61 @@
+<button
+  type="button"
+  id="theme-toggle"
+  class="theme-toggle"
+  aria-label="Switch to dark mode"
+>
+  <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path
+      d="M15.4 3.2A8.8 8.8 0 1 0 20.8 14 7.2 7.2 0 0 1 15.4 3.2Z"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linejoin="round"></path>
+  </svg>
+  <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <circle cx="12" cy="12" r="3.6" stroke="currentColor" stroke-width="1.6"></circle>
+    <path
+      d="M12 3.2v1.8M12 19v1.8M3.2 12h1.8M19 12h1.8M5.8 5.8l1.3 1.3M16.9 16.9l1.3 1.3M5.8 18.2l1.3-1.3M16.9 7.1l1.3-1.3"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: -0.15rem -0.15rem -0.15rem 0.1rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-muted);
+    cursor: pointer;
+  }
+
+  .theme-toggle:hover,
+  .theme-toggle:focus-visible {
+    color: var(--color-body);
+    outline: none;
+  }
+
+  .theme-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .theme-icon-sun {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .theme-icon-moon {
+    display: none;
+  }
+
+  :global(html[data-theme="dark"]) .theme-icon-sun {
+    display: block;
+  }
+</style>

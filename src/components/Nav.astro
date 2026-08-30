@@ -1,0 +1,45 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+import { site } from "../content/site";
+
+const path = Astro.url.pathname;
+const isHome = path === "/";
+const isBlog = path.startsWith("/blog/");
+const isResume = path === "/resume/" || path === "/resume";
+---
+
+<nav
+  class:list={[
+    "z-10 flex w-full items-center px-6 pt-6",
+    isHome ? "absolute left-0 right-0 justify-end" : "mx-auto max-w-2xl justify-between",
+  ]}
+>
+  {
+    !isHome && (
+      <a href="/" class="font-hand text-[16px] leading-5 text-ink hover:text-body transition-colors">
+        {site.name}
+      </a>
+    )
+  }
+  <div class="flex items-center gap-4 sm:gap-6">
+    <a
+      href="/blog/"
+      class:list={[
+        "font-mono text-[12px] uppercase tracking-[0.15em] transition-colors hover:text-body",
+        isBlog ? "text-body" : "text-muted",
+      ]}
+    >
+      Blog
+    </a>
+    <a
+      href="/resume/"
+      class:list={[
+        "font-mono text-[12px] uppercase tracking-[0.15em] transition-colors hover:text-body",
+        isResume ? "text-body" : "text-muted",
+      ]}
+    >
+      Resume
+    </a>
+    <ThemeToggle />
+  </div>
+</nav>

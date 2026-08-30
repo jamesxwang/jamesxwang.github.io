@@ -1,0 +1,11 @@
+---
+import PostList from "../../components/PostList.astro";
+import Base from "../../layouts/Base.astro";
+---
+
+<Base title="Blog" description="Notes on engineering, and a few other things.">
+  <main class="mx-auto w-full max-w-2xl flex-1 px-6 pb-20 pt-16">
+    <h1 class="section-label mb-12">Blog</h1>
+    <PostList />
+  </main>
+</Base>

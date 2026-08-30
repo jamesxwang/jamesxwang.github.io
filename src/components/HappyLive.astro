@@ -1,0 +1,115 @@
+---
+const words = ["coding", "wife"];
+---
+
+<span class="happy-live">
+  Happy{" "}
+  <span class="happy-live-slot" data-happy-live>
+    <span class="happy-live-track">
+      {[...words, words[0]].map((word) => (
+        <span class="happy-live-word">{word}</span>
+      ))}
+    </span>
+  </span>, happy life.
+  <svg class="happy-live-heart" viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      d="M12 20.2 10.6 19C6.2 15 3.2 12.3 3.2 8.9A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 8.8 1.8c0 3.4-3 6.1-7.4 10.1L12 20.2Z"
+      fill="#e24b4a"></path>
+  </svg>
+</span>
+
+<script>
+  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const INTERVAL = 2600;
+
+  const start = (slot: HTMLElement) => {
+    const track = slot.querySelector<HTMLElement>(".happy-live-track");
+    const items = [...(track?.querySelectorAll<HTMLElement>(".happy-live-word") ?? [])];
+    if (!track || items.length === 0 || slot.dataset.bound === "true") return;
+    slot.dataset.bound = "true";
+
+    const steps = items.length - 1;
+    let index = 0;
+    let timer = 0;
+    const ease = "0.55s cubic-bezier(0.22, 1, 0.36, 1)";
+
+    const go = (next: number, animate: boolean) => {
+      const line = items[0].offsetHeight;
+      const width = items[next].offsetWidth;
+      track.style.transition = animate ? `transform ${ease}` : "none";
+      slot.style.transition = animate ? `width ${ease}` : "none";
+      track.style.transform = `translateY(${-next * line}px)`;
+      slot.style.width = `${width}px`;
+      index = next;
+    };
+
+    const tick = () => {
+      if (REDUCED.matches) return;
+      const next = index + 1;
+      go(next, true);
+      if (next >= steps) {
+        track.addEventListener(
+          "transitionend",
+          () => {
+            go(0, false);
+          },
+          { once: true },
+        );
+      }
+    };
+
+    const play = () => {
+      window.clearInterval(timer);
+      if (REDUCED.matches) {
+        go(0, false);
+        return;
+      }
+      timer = window.setInterval(tick, INTERVAL);
+    };
+
+    go(0, false);
+    play();
+    REDUCED.addEventListener("change", play);
+    document.fonts?.ready.then(() => go(index, false));
+  };
+
+  document.querySelectorAll<HTMLElement>("[data-happy-live]").forEach(start);
+</script>
+
+<style>
+  .happy-live-heart {
+    display: inline-block;
+    width: 0.85em;
+    height: 0.85em;
+    margin: 0 0 -0.06em 0.2em;
+    vertical-align: baseline;
+  }
+
+  .happy-live-slot {
+    display: inline-block;
+    overflow: hidden;
+    height: 1lh;
+    vertical-align: bottom;
+    white-space: nowrap;
+  }
+
+  .happy-live-track {
+    display: block;
+    width: max-content;
+  }
+
+  .happy-live-word {
+    display: block;
+    width: max-content;
+    height: 1lh;
+    line-height: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .happy-live-slot,
+    .happy-live-track {
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>

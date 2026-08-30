@@ -1,0 +1,226 @@
+---
+import Base from "../../layouts/Base.astro";
+import { resumes } from "../../content/site";
+---
+
+<Base title="Resume" description="English and Chinese resumes.">
+  <main class="mx-auto w-full max-w-2xl flex-1 px-6 pb-20 pt-16">
+    <h1 class="section-label mb-12">Resume</h1>
+    <ul class="resume-cards">
+      {
+        resumes.map((resume) => (
+          <li>
+            <button
+              type="button"
+              class="resume-card"
+              data-resume-id={resume.id}
+              data-resume-src={resume.href}
+              data-resume-title={`${resume.label} · ${resume.subtitle}`}
+            >
+              <span class="resume-card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M7 3.5h7.2L19 8.2V20a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 20V5a1.5 1.5 0 0 1 1.5-1.5Z"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M14 3.6V8h4.6M9 12.5h6M9 16h6"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <span class="font-serif text-[18px] text-ink">{resume.label}</span>
+              <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                {resume.subtitle}
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+
+  <dialog id="resume-viewer" class="resume-viewer" aria-labelledby="resume-viewer-title">
+    <div class="resume-viewer-bar">
+      <p id="resume-viewer-title" class="resume-viewer-title"></p>
+      <div class="resume-viewer-actions">
+        <a id="resume-download" class="resume-viewer-link" href="" download>Download</a>
+        <button type="button" id="resume-close" class="resume-viewer-link">Close</button>
+      </div>
+    </div>
+    <iframe id="resume-frame" class="resume-frame" title="Resume"></iframe>
+  </dialog>
+</Base>
+
+<script>
+  const dialog = document.getElementById("resume-viewer") as HTMLDialogElement | null;
+  const frame = document.getElementById("resume-frame") as HTMLIFrameElement | null;
+  const titleEl = document.getElementById("resume-viewer-title");
+  const download = document.getElementById("resume-download") as HTMLAnchorElement | null;
+  const closeBtn = document.getElementById("resume-close");
+
+  const openViewer = (src: string, title: string) => {
+    if (!dialog || !frame || !titleEl || !download) return;
+    titleEl.textContent = title;
+    download.href = src;
+    frame.src = src;
+    dialog.showModal();
+  };
+
+  const closeViewer = () => {
+    dialog?.close();
+  };
+
+  document.querySelectorAll<HTMLButtonElement>("[data-resume-src]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const src = button.dataset.resumeSrc;
+      const title = button.dataset.resumeTitle ?? "Resume";
+      const id = button.dataset.resumeId;
+      if (!src) return;
+      if (id && location.hash !== `#${id}`) {
+        history.replaceState(null, "", `#${id}`);
+      }
+      openViewer(src, title);
+    });
+  });
+
+  closeBtn?.addEventListener("click", closeViewer);
+
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) closeViewer();
+  });
+
+  dialog?.addEventListener("close", () => {
+    if (frame) frame.src = "";
+    if (location.hash) history.replaceState(null, "", location.pathname);
+  });
+
+  const hashed = document.querySelector<HTMLButtonElement>(
+    `[data-resume-id="${CSS.escape(location.hash.slice(1))}"]`,
+  );
+  hashed?.click();
+</script>
+
+<style>
+  .resume-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .resume-cards {
+      gap: 1.25rem;
+    }
+  }
+
+  .resume-card {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 1.6rem 0.7rem 1.4rem;
+    border: 1px solid var(--color-line);
+    background: transparent;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .resume-card:hover,
+  .resume-card:focus-visible {
+    border-color: var(--muted);
+    background: var(--color-soft);
+    outline: none;
+  }
+
+  .resume-card-icon {
+    display: flex;
+    color: var(--color-body);
+    margin-bottom: 0.55rem;
+  }
+
+  .resume-card-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  @media (min-width: 640px) {
+    .resume-card {
+      padding: 2.25rem 1.25rem 1.85rem;
+    }
+  }
+
+  .resume-viewer {
+    position: fixed;
+    inset: 0;
+    width: min(56rem, calc(100vw - 1.5rem));
+    height: min(90vh, 58rem);
+    max-width: calc(100vw - 1.5rem);
+    max-height: calc(100vh - 1.5rem);
+    margin: auto;
+    padding: 0;
+    border: none;
+    background: var(--page);
+    box-shadow: 0 18px 50px rgb(0 0 0 / 0.16);
+  }
+
+  .resume-viewer::backdrop {
+    background: rgb(26 26 26 / 0.42);
+  }
+
+  .resume-viewer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.1rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .resume-viewer-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-body);
+  }
+
+  .resume-viewer-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .resume-viewer-link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .resume-viewer-link:hover {
+    color: var(--color-body);
+  }
+
+  .resume-frame {
+    display: block;
+    width: 100%;
+    height: calc(100% - 3.1rem);
+    border: 0;
+    background: var(--color-soft);
+  }
+</style>

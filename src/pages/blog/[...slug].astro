@@ -1,0 +1,52 @@
+---
+import { getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+
+const tags = post.data.tags ?? [];
+---
+
+<Base title={post.data.title} description={post.data.title}>
+  <article class="mx-auto w-full max-w-2xl flex-1 px-6 pb-20 pt-16">
+    <p class="mb-4 font-mono text-[12px] tracking-wide text-muted">
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+    </p>
+    <h1 class="mb-8 font-serif text-[2rem] leading-tight text-ink">{post.data.title}</h1>
+    <div class="prose">
+      <Content />
+    </div>
+    {
+      tags.length > 0 && (
+        <p class="mt-12 font-mono text-[11px] tracking-wide text-muted">
+          {tags.join(" · ")}
+        </p>
+      )
+    }
+    <p class="mt-10">
+      <a
+        href="/blog/"
+        class="font-mono text-[12px] uppercase tracking-[0.15em] text-muted hover:text-body transition-colors"
+      >
+        ← Blog
+      </a>
+    </p>
+  </article>
+</Base>

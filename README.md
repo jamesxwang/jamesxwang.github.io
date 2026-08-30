@@ -1,3 +1,10 @@
-# 个人博客 My Personal Blog
+# James Wang
 
-Visit: https://jamesxwang.com
+Personal site: https://jamesxwang.com
+
+```bash
+npm install
+npm run dev
+```
+
+Built with [Astro](https://astro.build/). Deployed from the `source` branch to GitHub Pages (`master`).

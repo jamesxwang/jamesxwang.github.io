@@ -1,0 +1,13 @@
+---
+import { bio } from "../content/site";
+import HappyLive from "./HappyLive.astro";
+---
+
+<section class="mx-auto mb-10 max-w-2xl px-6 py-8 md:py-12">
+  {
+    bio.map((paragraph) => (
+      <p class="bio-text" set:html={paragraph.html} />
+    ))
+  }
+  <p class="bio-text last:mb-0"><HappyLive /></p>
+</section>
