@@ -38,11 +38,19 @@ export const timeline = [
   },
   {
     kind: "work",
-    year: "2018",
+    year: "2017",
     company: "Hunan Wongxin Hi-tech Co., Ltd.",
-    role: "Intern",
+    role: "Software Engineer",
     color: "#ECA954",
     rise: 70,
+  },
+  {
+    kind: "education",
+    year: "2018–2020",
+    company: "UniMelb",
+    role: "Master of Computer Science",
+    href: "https://study.unimelb.edu.au/find/courses/graduate/master-of-computer-science/",
+    rise: 58,
   },
   {
     kind: "work",
@@ -52,14 +60,6 @@ export const timeline = [
     color: "#111111",
     ink: "#ffffff",
     rise: 104,
-  },
-  {
-    kind: "education",
-    year: "2018–2020",
-    company: "UniMelb",
-    role: "Master of Computer Science",
-    href: "https://study.unimelb.edu.au/find/courses/graduate/master-of-computer-science/",
-    rise: 58,
   },
   {
     kind: "work",
