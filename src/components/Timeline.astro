@@ -58,21 +58,22 @@ const trackWidth = arrowLeft + 12 + startPad;
 ---
 
 <section
-  class="relative w-full min-h-svh"
+  class="relative w-full min-w-0"
   aria-label="Career timeline"
   data-timeline
 >
   <div
-    class="sticky top-0 flex h-svh items-center overflow-hidden py-8 md:py-12"
+    class="timeline-band relative z-10 flex min-h-[calc(100svh-10rem)] items-center overflow-hidden py-16 md:py-20"
     data-timeline-sticky
   >
+    <div class="timeline-grid" aria-hidden="true"></div>
     <div
-      class="relative shrink-0 will-change-transform"
+      class="relative z-10 shrink-0 will-change-transform"
       style={`height: 300px; width: ${trackWidth}px;`}
       data-timeline-track
     >
       <div
-        class="absolute bg-line"
+        class="absolute bg-muted"
         data-timeline-axis
         style={`top: 150px; left: 0; height: 1px; width: ${arrowLeft}px;`}
       >
@@ -89,7 +90,7 @@ const trackWidth = arrowLeft + 12 + startPad;
       >
         <path
           d="M2 1.5L10 5.5L2 9.5"
-          stroke="var(--line)"
+          stroke="var(--muted)"
           stroke-width="1.5"
           stroke-linecap="round"
           stroke-linejoin="round"></path>
@@ -108,11 +109,11 @@ const trackWidth = arrowLeft + 12 + startPad;
             >
               <div
                 class="absolute"
-                style={`top: ${below ? axis : dotTop}px; left: 5px; width: 1px; height: ${connectorHeight}px; border-left: 1px dashed var(--line);`}
+                style={`top: ${below ? axis : dotTop}px; left: 5px; width: 1px; height: ${connectorHeight}px; border-left: 1px dashed var(--muted);`}
               />
               <div
                 class:list={["absolute rounded-sm", !below && isNearBlack(item.color) && "timeline-halo"]}
-                style={`top: ${dotTop}px; left: 0; transform: translateY(-50%); width: 10px; height: 10px; background: ${below ? "var(--line)" : fill};`}
+                style={`top: ${dotTop}px; left: 0; transform: translateY(-50%); width: 10px; height: 10px; background: ${below ? "var(--muted)" : fill};`}
               />
               <div
                 class="font-timeline -translate-y-1/2 flex flex-col items-start gap-0.5 uppercase"
@@ -171,10 +172,99 @@ const trackWidth = arrowLeft + 12 + startPad;
   :global(html[data-theme="dark"]) .timeline-halo {
     box-shadow: 0 0 0 1px var(--muted);
   }
+
+  .timeline-grid {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    mask-image: linear-gradient(
+      to bottom,
+      transparent,
+      #000 12%,
+      #000 88%,
+      transparent
+    );
+  }
+
+  .timeline-grid::before,
+  .timeline-grid::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: color-mix(in oklch, var(--muted) 14%, transparent);
+  }
+
+  .timeline-grid::before {
+    mask-image:
+      repeating-linear-gradient(
+        to bottom,
+        #000 0 1px,
+        transparent 1px 24px
+      ),
+      repeating-linear-gradient(
+        to right,
+        #000 0 4px,
+        transparent 4px 8px
+      );
+    mask-composite: intersect;
+    -webkit-mask-image:
+      repeating-linear-gradient(
+        to bottom,
+        #000 0 1px,
+        transparent 1px 24px
+      ),
+      repeating-linear-gradient(
+        to right,
+        #000 0 4px,
+        transparent 4px 8px
+      );
+    -webkit-mask-composite: source-in;
+  }
+
+  .timeline-grid::after {
+    mask-image:
+      repeating-linear-gradient(
+        to right,
+        #000 0 1px,
+        transparent 1px 24px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        #000 0 4px,
+        transparent 4px 8px
+      );
+    mask-composite: intersect;
+    -webkit-mask-image:
+      repeating-linear-gradient(
+        to right,
+        #000 0 1px,
+        transparent 1px 24px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        #000 0 4px,
+        transparent 4px 8px
+      );
+    -webkit-mask-composite: source-in;
+  }
+
+  :global(html[data-theme="dark"]) .timeline-grid::before,
+  :global(html[data-theme="dark"]) .timeline-grid::after {
+    background-color: color-mix(in oklch, var(--muted) 16%, transparent);
+  }
+
+  .timeline-band {
+    scrollbar-width: none;
+  }
+
+  .timeline-band::-webkit-scrollbar {
+    display: none;
+  }
 </style>
 
 <script>
-  function initTimelinePin() {
+  function initTimeline() {
     const section = document.querySelector<HTMLElement>("[data-timeline]");
     const sticky = section?.querySelector<HTMLElement>("[data-timeline-sticky]");
     const track = section?.querySelector<HTMLElement>("[data-timeline-track]");
@@ -216,25 +306,39 @@ const trackWidth = arrowLeft + 12 + startPad;
 
     const overflow = () => Math.max(0, track.scrollWidth - window.innerWidth);
 
+    const peek = () => {
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      return Math.round(rem * 5);
+    };
+
+    const pinHeight = () => Math.max(360, window.innerHeight - peek() * 2);
+
     const layout = () => {
       pack();
+      sticky.scrollLeft = 0;
       const extra = overflow();
+      const top = peek();
+      const height = pinHeight();
       if (extra <= 1) {
         section.style.height = "";
-        sticky.classList.remove("sticky", "top-0", "h-svh");
+        sticky.style.top = "";
+        sticky.style.height = "";
+        sticky.classList.remove("sticky");
         track.style.transform = "";
         return;
       }
-      sticky.classList.add("sticky", "top-0", "h-svh");
-      section.style.height = `${window.innerHeight + extra}px`;
+      sticky.classList.add("sticky");
+      sticky.style.top = `${top}px`;
+      sticky.style.height = `${height}px`;
+      section.style.height = `${height + extra}px`;
     };
 
     const update = () => {
       const extra = overflow();
       if (extra <= 1) return;
-      const max = section.offsetHeight - window.innerHeight;
-      const scrolled = Math.min(Math.max(-section.getBoundingClientRect().top, 0), max);
-      const progress = max > 0 ? scrolled / max : 0;
+      const top = peek();
+      const scrolled = Math.min(Math.max(top - section.getBoundingClientRect().top, 0), extra);
+      const progress = extra > 0 ? scrolled / extra : 0;
       track.style.transform = `translate3d(${-extra * progress}px, 0, 0)`;
     };
 
@@ -243,10 +347,10 @@ const trackWidth = arrowLeft + 12 + startPad;
       update();
     };
 
-    const prior = (window as Window & { __timelinePinAbort?: AbortController }).__timelinePinAbort;
+    const prior = (window as Window & { __timelineAbort?: AbortController }).__timelineAbort;
     prior?.abort();
     const ac = new AbortController();
-    (window as Window & { __timelinePinAbort?: AbortController }).__timelinePinAbort = ac;
+    (window as Window & { __timelineAbort?: AbortController }).__timelineAbort = ac;
 
     refresh();
     window.addEventListener("scroll", update, { passive: true, signal: ac.signal });
@@ -254,5 +358,5 @@ const trackWidth = arrowLeft + 12 + startPad;
     document.fonts?.ready.then(refresh);
   }
 
-  initTimelinePin();
+  initTimeline();
 </script>

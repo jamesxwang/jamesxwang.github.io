@@ -17,7 +17,7 @@ const bioLink = (href: string, label: string, logo: string, logoClass = "bio-log
 
 export const bio = [
   {
-    html: `I'm James, a software engineer working at ${bioLink("https://www.airwallex.com/en-au/spend-management", "Airwallex Spend", "/images/airwallex.png")}, based in ${bioLink("https://www.sydney.com/", "Sydney", "/images/sydney.svg")}, Australia.`,
+    html: `I'm James, a software engineer working at ${bioLink("https://www.airwallex.com/en-au/spend-management", "Airwallex Spend", "/images/airwallex.png")}, based in <span class="bio-brand"><img src="/images/sydney.svg" alt="" aria-hidden="true" class="bio-logo" />Sydney</span>, Australia.`,
   },
   {
     html: `Before that I was a frontend engineer at ${bioLink("https://www.tencentcloud.com", "Tencent Cloud", "/images/tencent-cloud.svg")}.`,
@@ -44,7 +44,8 @@ export const timeline = [
     year: "2017",
     company: "Hunan Wongxin Hi-tech Co., Ltd.",
     role: "Software Engineer",
-    color: "#ECA954",
+    color: "#1F8A7D",
+    ink: "#ffffff",
     rise: 70,
   },
   {
