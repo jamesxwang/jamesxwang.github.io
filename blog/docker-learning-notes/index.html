@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Docker Learning Notes"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://jamesxwang.com/blog/docker-learning-notes/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="James Wang" href="https://jamesxwang.com/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500&family=Homemade+Apple&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet"><title>Docker Learning Notes · James Wang</title><script>
+      (function () {
+        var key = "theme";
+        var root = document.documentElement;
+        var media = window.matchMedia("(prefers-color-scheme: dark)");
+
+        function stored() {
+          var value = localStorage.getItem(key);
+          return value === "light" || value === "dark" ? value : null;
+        }
+
+        function resolve() {
+          return stored() || (media.matches ? "dark" : "light");
+        }
+
+        function apply(theme) {
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+          var button = document.getElementById("theme-toggle");
+          if (!button) return;
+          var next = theme === "dark" ? "light" : "dark";
+          button.setAttribute("aria-label", "Switch to " + next + " mode");
+          button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+        }
+
+        apply(resolve());
+
+        document.addEventListener("click", function (event) {
+          var target = event.target;
+          if (!target || !target.closest || !target.closest("#theme-toggle")) return;
+          var next = root.dataset.theme === "dark" ? "light" : "dark";
+          localStorage.setItem(key, next);
+          apply(next);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+          apply(resolve());
+        });
+
+        media.addEventListener("change", function (event) {
+          if (stored()) return;
+          apply(event.matches ? "dark" : "light");
+        });
+      })();
+    </script><style>.happy-live-heart[data-astro-cid-smffprut]{display:inline-block;width:.85em;height:.85em;margin:0 0 -.06em .2em;vertical-align:baseline}.happy-live-slot[data-astro-cid-smffprut]{display:inline-block;overflow:hidden;height:1lh;vertical-align:bottom;white-space:nowrap}.happy-live-track[data-astro-cid-smffprut]{display:block;width:max-content}.happy-live-word[data-astro-cid-smffprut]{display:block;width:max-content;height:1lh;line-height:inherit}@media(prefers-reduced-motion:reduce){.happy-live-slot[data-astro-cid-smffprut],.happy-live-track[data-astro-cid-smffprut]{transform:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="/_astro/_slug_.eDjn-bT0.css"></head> <body class="relative flex min-h-screen min-w-0 flex-col overflow-x-clip"> <nav class="z-10 flex w-full items-center px-6 pt-6 mx-auto max-w-2xl justify-between"> <a href="/" class="font-hand text-[16px] leading-5 text-ink hover:text-body transition-colors"> James Wang </a> <div class="flex items-center gap-4 sm:gap-6"> <a href="/blog/" class="font-mono text-[12px] uppercase tracking-[0.15em] transition-colors hover:text-body text-body">
+Blog
+</a> <a href="/resume/" class="font-mono text-[12px] uppercase tracking-[0.15em] transition-colors hover:text-body text-muted">
+Resume
+</a> <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" data-astro-cid-x3pjskd3> <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true" data-astro-cid-x3pjskd3> <path d="M15.4 3.2A8.8 8.8 0 1 0 20.8 14 7.2 7.2 0 0 1 15.4 3.2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" data-astro-cid-x3pjskd3></path> </svg> <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="3.6" stroke="currentColor" stroke-width="1.6" data-astro-cid-x3pjskd3></circle> <path d="M12 3.2v1.8M12 19v1.8M3.2 12h1.8M19 12h1.8M5.8 5.8l1.3 1.3M16.9 16.9l1.3 1.3M5.8 18.2l1.3-1.3M16.9 7.1l1.3-1.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" data-astro-cid-x3pjskd3></path> </svg> </button>  </div> </nav>  <article class="mx-auto w-full max-w-2xl flex-1 px-6 pb-20 pt-16"> <p class="mb-4 font-mono text-[12px] tracking-wide text-muted"> <time datetime="2018-06-26T21:44:07.000Z">June 26, 2018</time> </p> <h1 class="mb-8 font-serif text-[2rem] leading-tight text-ink">Docker Learning Notes</h1> <div class="prose"> <h1 id="introduction">Introduction：</h1>
+<ul>
+<li>Series of <strong>Docker Learning Notes</strong> are based on:<br>
+OS：Ubuntu 16.04 LTS<br>
+Java version：Jdk 1.8</li>
+</ul>
+<h3 id="what-is-docker">What is Docker?</h3>
+<p><img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/docker/docker.jpg" alt="docker"></p>
+<ul>
+<li>Docker’s idea comes from cargo containers. What problem can cargo containers solve? For example, goods can be put in order on a large ship and all kinds of goods are standardized by containers, containers and containers do not interact with each other so that we don’t need a special fruit ship or a chemical carrier. As long as these goods are properly packaged in containers, we can transport them with one large ship. Docker is a similar idea like this. Cloud computing is now very popular, and cloud computing is like a big cargo ship while docker is a container.</li>
+</ul>
+<!-- more -->
+<p>1> Different applications may have different application environments, for example, dependencies for websites developed by .Net and by PHP are not the same. If install their dependencies on one server, debugging will take a long time and dependencies might be conflict to each other. For example, IIS and Apache access port conflicts. At this point, you have to isolate the website developed by .Net and the website developed by PHP. Traditionally, we can create different virtual machines on the server and put different applications on different virtual machines, but the cost of virtual machines is relatively high. Docker can realize the function of virtual machine isolation application environment, and it costs less than virtual machine.</p>
+<p>2> When you develop the software on Ubuntu, but the operation and maintenance management is on CentOS, the operation and maintenance of your software from the development environment to the production environment will encounter some Ubuntu to CentOS problems, such as: a special version of the database only supported on Ubuntu but not on CentOS, so that you have to solve such problems during the process of transfer between operations. But if you use docker, you can directly transfer the development environment to operation and deploy by docker directly and faster than regular deployment.</p>
+<p>3> On the server load, if you use virtual machines instead of docker, free memory will not be used.</p>
+<h3 id="life-cycle-of-dockerimage-container-registry">Life cycle of docker:（image, container, registry）</h3>
+<h4 id="1docker-image">1.docker image</h4>
+<ul>
+<li>Docker image is actually made up of a file system, which is called UnionFS. At the bottom of the Docker image is bootfs. This layer is the same as our typical Linux/Unix system, including boot loader and kernel. When the boot is loaded, the kernel is all in memory. At this point, the right to use memory is transferred from bootfs to the kernel, and the system will also unload bootfs. The first layer of Docker on bootfs is rootfs (root file system). Rootfs is the distribution of different operating systems, such as Ubuntu, Centos and so on.
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/docker/docker-image.png" alt="docker-image"></li>
+</ul>
+<h4 id="2docker-container">2.docker container</h4>
+<ul>
+<li><code>docker run</code> Instantiate an image to a container, similar to “new” in java.<br></li>
+<li>Some parameters for <code>docker run</code>：<br>
+<code>-d</code> : Run container in background<br>
+<code>-e</code> : Set environment variables<br>
+<code>-p</code> : Host port:Container port <br>
+<code>--name</code> : Set name for container</li>
+</ul>
+<h4 id="3docker-registry">3.docker registry</h4>
+<ul>
+<li>A place to store and share docker images.<br>
+eg., Docker Hub:  <a href="https://hub.docker.com">hub.docker.com</a></li>
+</ul>
+<h3 id="deploying-a-web-application-with-docker">Deploying a web application with docker</h3>
+<h4 id="1pull-source-code-to-host">1.pull source code to host</h4>
+<p>Subversion: <code>svn checkout svn://svn_address [host_volume]</code><br>
+Git:<code>git clone [.git file]</code></p>
+<h4 id="2packaging-jarwar-file-through-mavenantother">2.Packaging .jar/.war file through Maven/ANT/Other</h4>
+<p><code>mvn package</code> / <code>ant makewar</code> / etc.</p>
+<h4 id="3write-a-dockerfile">3.Write a Dockerfile</h4>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">FROM</span><span style="color:#24292E"> [imageName：tag]</span></span>
+<span class="line"><span style="color:#6F42C1">MAINTAINER</span><span style="color:#24292E"> [author] [contact_e-mail]</span></span>
+<span class="line"><span style="color:#6F42C1">ADD</span><span style="color:#24292E"> [.jar </span><span style="color:#032F62">file]</span><span style="color:#24292E"> [volume_in_docker_container]</span></span>
+<span class="line"><span style="color:#6F42C1">RUN</span><span style="color:#032F62"> bash</span><span style="color:#005CC5"> -c</span><span style="color:#032F62"> 'touch /opt/xxx.jar'</span></span>
+<span class="line"><span style="color:#6A737D">#Change timezone</span></span>
+<span class="line"><span style="color:#6F42C1">RUN</span><span style="color:#032F62"> echo</span><span style="color:#032F62"> "Asia/Shanghai"</span><span style="color:#D73A49"> ></span><span style="color:#032F62"> /etc/timezone</span><span style="color:#24292E"> &#x26;&#x26; </span><span style="color:#6F42C1">dpkg-reconfigure</span><span style="color:#005CC5"> -f</span><span style="color:#032F62"> noninteractive</span><span style="color:#032F62"> tzdata</span></span>
+<span class="line"><span style="color:#6A737D">#expose default port [8080_for_tomcat]</span></span>
+<span class="line"><span style="color:#6F42C1">EXPOSE</span><span style="color:#005CC5"> 8080</span></span>
+<span class="line"><span style="color:#6A737D">#execute .war/.jar file</span></span>
+<span class="line"><span style="color:#6F42C1">CMD</span><span style="color:#24292E"> [</span><span style="color:#032F62">"catalina.sh"</span><span style="color:#24292E">,</span><span style="color:#032F62">"run"</span><span style="color:#24292E">]       --</span><span style="color:#D73A49">for</span><span style="color:#24292E"> xxx.war</span></span>
+<span class="line"><span style="color:#6F42C1">CMD</span><span style="color:#24292E"> [</span><span style="color:#032F62">"java"</span><span style="color:#24292E">,</span><span style="color:#032F62">"-jar"</span><span style="color:#24292E">,</span><span style="color:#032F62">"/opt/xxx.jar"</span><span style="color:#24292E">]   --</span><span style="color:#D73A49">for</span><span style="color:#24292E"> xxx.jar</span></span></code></pre>
+<h4 id="4docker-build">4.Docker build</h4>
+<ul>
+<li><code>docker build -t [imageName] .</code><br>
+<em>DO NOT FORGET</em> the <code>.</code> at the back.</li>
+</ul>
+<h4 id="5docker-run">5.Docker run</h4>
+<ul>
+<li><code>docker run -d -p [port]:[port in container]</code></li>
+</ul>
+<h3 id="other-commands-for-docker">Other commands for docker</h3>
+<p><code>sudo docker ps -a</code> : List all containers<br>
+<code>sudo docker images</code> : List all images
+<code>sudo docker images|grep test|awk '{print $3 }'|xargs sudo docker rmi</code> : remove all images that contain ‘test’</p>
+<h1 id="installation">Installation</h1>
+<p>Before Installing docker, we have to install and configure necessary environments.</p>
+<h3 id="configure-java-environment">Configure Java environment</h3>
+<ul>
+<li>
+<p>Jdk Download link：
+<code>http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</code></p>
+</li>
+<li>
+<p>Install Jdk</p>
+</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> mkdir</span><span style="color:#032F62"> /opt/java</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> mv</span><span style="color:#032F62"> jdk-8u162-linux-x64.tar.gz</span><span style="color:#032F62"> /opt/java</span></span>
+<span class="line"><span style="color:#005CC5">cd</span><span style="color:#032F62"> /opt/java/</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> tar</span><span style="color:#005CC5"> -zxvf</span><span style="color:#005CC5"> *</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> rm</span><span style="color:#005CC5"> *</span><span style="color:#032F62">.tar.gz</span></span></code></pre>
+<ul>
+<li>Configure environment variables: <code>sudo vim ~/.bashrc</code></li>
+<li>Add JAVA_HOME, PATH and CLASSPATH for Jdk：</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#D73A49">export</span><span style="color:#24292E"> JAVA_HOME</span><span style="color:#D73A49">=</span><span style="color:#24292E">/opt/java/jdk1.8.0_162</span></span>
+<span class="line"><span style="color:#D73A49">export</span><span style="color:#24292E"> PATH</span><span style="color:#D73A49">=</span><span style="color:#24292E">$PATH:$JAVA_HOME/bin</span></span>
+<span class="line"><span style="color:#D73A49">export</span><span style="color:#24292E"> CLASSPATH</span><span style="color:#D73A49">=</span><span style="color:#24292E">.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar</span></span></code></pre>
+<ul>
+<li>Remenber to source the configuration file!
+<code>sudo source ~/.bashrc</code></li>
+</ul>
+<h3 id="configure-maven-environment">Configure Maven Environment</h3>
+<ul>
+<li>Maven Download link: <code>https://maven.apache.org/download.cgi</code></li>
+<li>Install Maven</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> mkdir</span><span style="color:#032F62"> /opt/maven</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> mv</span><span style="color:#032F62"> apache-maven3.5.2.tar.gz</span><span style="color:#032F62"> /opt/maven</span></span>
+<span class="line"><span style="color:#005CC5">cd</span><span style="color:#032F62"> /opt/maven</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> tar</span><span style="color:#005CC5"> -zxvf</span><span style="color:#005CC5"> *</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> rm</span><span style="color:#005CC5"> *</span><span style="color:#032F62">.tar.gz</span></span></code></pre>
+<ul>
+<li>Configure environment variables: <code>sudo vim etc/profile</code></li>
+<li>Add M2_HOME, PATH and CLASSPATH for Maven：</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#D73A49">export</span><span style="color:#24292E"> M2_HOME</span><span style="color:#D73A49">=</span><span style="color:#24292E">/opt/maven/apache-maven-3.5.2</span></span>
+<span class="line"><span style="color:#D73A49">export</span><span style="color:#24292E"> PATH</span><span style="color:#D73A49">=</span><span style="color:#24292E">$PATH:$M2_HOME/bin</span></span>
+<span class="line"><span style="color:#D73A49">export</span><span style="color:#24292E"> CLASSPATH</span><span style="color:#D73A49">=</span><span style="color:#24292E">$CLASSPATH:$M2_HOME/lib</span></span></code></pre>
+<ul>
+<li>
+<p>Remenber to source the configuration file: <code>sudo source etc/profile</code></p>
+</li>
+<li>
+<p>Check version for Java and Maven：</p>
+</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">java-</span><span style="color:#032F62"> version</span></span>
+<span class="line"><span style="color:#6F42C1">mvn</span><span style="color:#005CC5"> -v</span></span></code></pre>
+<h3 id="install-and-configure-docker">Install and configure Docker</h3>
+<ul>
+<li>Install docker with apt</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> apt-get</span><span style="color:#032F62"> update</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> apt-get</span><span style="color:#032F62"> install</span><span style="color:#032F62"> docker.io</span></span></code></pre>
+<ul>
+<li>In China, the speed of downloading docker image from official library is slow,so I configured a daocloud accelerator for docker:</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> curl</span><span style="color:#005CC5"> -sSL</span><span style="color:#032F62"> https://get.daocloud.io/daotools/set_mirror.sh</span><span style="color:#D73A49"> |</span><span style="color:#6F42C1"> sh</span><span style="color:#005CC5"> -s</span><span style="color:#032F62"> http://ff626ecd.m.daocloud.io</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> systemctl</span><span style="color:#032F62"> restart</span><span style="color:#032F62"> docker.service</span></span></code></pre>
+<ul>
+<li>Check docker version: <code>docker --version</code></li>
+</ul>
+<h1 id="integration-with-jenkins">Integration with Jenkins</h1>
+<h3 id="why-choose-jenkins">Why choose Jenkins?</h3>
+<p>Jenkins is an extensible continuous integration engine, mainly used in build / test software projects continuously and automatically and monitoring some of the tasks that are executed on time. So it can ensure developers and related personnel save time and effort to improve development efficiency.</p>
+<h3 id="install-jenkins">Install Jenkins</h3>
+<ul>
+<li>Download and install Jenkins</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">wget</span><span style="color:#005CC5"> -q</span><span style="color:#005CC5"> -O</span><span style="color:#032F62"> -</span><span style="color:#032F62"> https://pkg.jenkins.io/debian/jenkins-ci.org.key</span><span style="color:#D73A49"> |</span><span style="color:#6F42C1"> sudo</span><span style="color:#032F62"> apt-key</span><span style="color:#032F62"> add</span><span style="color:#032F62"> -</span><span style="color:#24292E">  </span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> sh</span><span style="color:#005CC5"> -c</span><span style="color:#032F62"> 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> apt-get</span><span style="color:#032F62"> update</span><span style="color:#24292E">  </span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> apt-get</span><span style="color:#032F62"> install</span><span style="color:#032F62"> jenkins</span></span></code></pre>
+<ul>
+<li>Visit <a href="http://localhost:8080">localhost:8080</a> for Jenkins home page
+Initial password for admin: <code> vim /var/lib/jenkins/secrets/initialAdminPassword</code></li>
+</ul>
+<h1 id="ssl-configuration">SSL Configuration</h1>
+<h3 id="differences-between-http-and-https">Differences between Http and Https</h3>
+<p>● The HyperText Transfer Protocol (HTTP) protocol is used to transmit information between the Web browser and the web server. The HTTP protocol sends content in plaintext, and does not provide any way of data encryption. If an attacker intercepts the transmission message between the Web browser and the web server, the information can be read directly. Therefore, HTTP protocol is not suitable for transmitting some sensitive information, such as credit card number, password and other payment information.</p>
+<p>● In order to solve this defect of the HTTP protocol, it is necessary to use another protocol: Hypertext Transfer Protocol Secure (HTTPS). In order to secure data transmission, HTTPS adds SSL protocol on the basis of HTTP. SSL relies on certificates to verify the identity of the server and encrypts the communication between the browser and the server.</p>
+<p><img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/docker/HTTPvsHTTPS.jpg" alt="HTTPvsHTTPS"></p>
+<p>● The data transmitted by the HTTP protocol are not encrypted, that is, plaintext, so it is very unsafe to use the HTTP protocol to transmit privacy information. In order to ensure the encryption and transmission of these privacy data, the Netscape Co designed the SSL (Secure Sockets Layer) protocol to encrypt the data transmitted by the HTTP protocol—HTTPS. To put it simply, the HTTPS protocol is a network protocol constructed by SSL+HTTP protocol, which is capable of encrypting transmission and identity authentication,so it’s more secure than HTTP protocol.</p>
+<h3 id="apply-for-a-ssl-certificate">Apply for a SSL certificate</h3>
+<p>● There are several ways to apply a SSL certificate, and I chose TrustAsia SSL certificate.The process of application will not be detailed.
+Below are the certificates for Apache, IIS, Nginx and Tomcat:
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/docker/SSL-certificate-1.png" alt="SSL-certificate-1"></p>
+<h3 id="configure-ssl-for-spring-boot-project">Configure SSL for Spring Boot project</h3>
+<p>● Put the certificate( .jks file in tomcat folder) in the project at the application.yml level directory.
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/docker/SSL-certificate-2.png" alt="SSL-certificate-2">
+● Add configurations for ssl in applcation.yml( or application.properties)
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/docker/SSL-configurations.png" alt="SSL-configurations"></p>
+<p>● Add http redirect in the Spring Boot application file</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#24292E">@</span><span style="color:#D73A49">Bean</span></span>
+<span class="line"><span style="color:#D73A49">public</span><span style="color:#24292E"> EmbeddedServletContainerFactory </span><span style="color:#6F42C1">servletContainer</span><span style="color:#24292E">(){</span></span>
+<span class="line"><span style="color:#24292E">    TomcatEmbeddedServletContainerFactory tomcat</span><span style="color:#D73A49">=new</span><span style="color:#6F42C1"> TomcatEmbeddedServletContainerFactory</span><span style="color:#24292E">(){</span></span>
+<span class="line"><span style="color:#24292E">        @</span><span style="color:#D73A49">Override</span></span>
+<span class="line"><span style="color:#D73A49">        protected</span><span style="color:#D73A49"> void</span><span style="color:#6F42C1"> postProcessContext</span><span style="color:#24292E">(Context </span><span style="color:#E36209">context</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#24292E">            SecurityConstraint securityConstraint</span><span style="color:#D73A49">=new</span><span style="color:#6F42C1"> SecurityConstraint</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#24292E">            securityConstraint.</span><span style="color:#6F42C1">setUserConstraint</span><span style="color:#24292E">(</span><span style="color:#032F62">"CONFIDENTIAL"</span><span style="color:#24292E">);</span><span style="color:#6A737D">//confidential</span></span>
+<span class="line"><span style="color:#24292E">            SecurityCollection collection</span><span style="color:#D73A49">=new</span><span style="color:#6F42C1"> SecurityCollection</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#24292E">            collection.</span><span style="color:#6F42C1">addPattern</span><span style="color:#24292E">(</span><span style="color:#032F62">"/*"</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#24292E">            securityConstraint.</span><span style="color:#6F42C1">addCollection</span><span style="color:#24292E">(collection);</span></span>
+<span class="line"><span style="color:#24292E">            context.</span><span style="color:#6F42C1">addConstraint</span><span style="color:#24292E">(securityConstraint);</span></span>
+<span class="line"><span style="color:#24292E">        }</span></span>
+<span class="line"><span style="color:#24292E">    };</span></span>
+<span class="line"><span style="color:#24292E">    tomcat.</span><span style="color:#6F42C1">addAdditionalTomcatConnectors</span><span style="color:#24292E">(</span><span style="color:#6F42C1">httpConnector</span><span style="color:#24292E">());</span></span>
+<span class="line"><span style="color:#D73A49">    return</span><span style="color:#24292E"> tomcat;</span></span>
+<span class="line"><span style="color:#24292E">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">@</span><span style="color:#D73A49">Bean</span></span>
+<span class="line"><span style="color:#D73A49">public</span><span style="color:#24292E"> Connector </span><span style="color:#6F42C1">httpConnector</span><span style="color:#24292E">() {</span></span>
+<span class="line"><span style="color:#24292E">    Connector connector </span><span style="color:#D73A49">=</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> Connector</span><span style="color:#24292E">(</span><span style="color:#032F62">"org.apache.coyote.http11.Http11NioProtocol"</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#24292E">    connector.</span><span style="color:#6F42C1">setScheme</span><span style="color:#24292E">(</span><span style="color:#032F62">"http"</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#6A737D">    // The port number of the HTTP that Connector monitors</span></span>
+<span class="line"><span style="color:#24292E">    connector.</span><span style="color:#6F42C1">setPort</span><span style="color:#24292E">(</span><span style="color:#005CC5">80</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#24292E">    connector.</span><span style="color:#6F42C1">setSecure</span><span style="color:#24292E">(</span><span style="color:#005CC5">false</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#6A737D">    // Redirect port after monitoring HTTP port</span></span>
+<span class="line"><span style="color:#24292E">    connector.</span><span style="color:#6F42C1">setRedirectPort</span><span style="color:#24292E">(</span><span style="color:#005CC5">443</span><span style="color:#24292E">);</span></span>
+<span class="line"><span style="color:#D73A49">    return</span><span style="color:#24292E"> connector;</span></span>
+<span class="line"><span style="color:#24292E">}</span></span></code></pre>
+<h3 id="add-post-steps-execute-shell-in-jenkins">Add ‘Post Steps’-‘Execute shell’ in Jenkins</h3>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#005CC5">cd</span><span style="color:#032F62"> /var/lib/jenkins/jobs/wxblog</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> docker</span><span style="color:#032F62"> build</span><span style="color:#005CC5"> -t</span><span style="color:#032F62"> wxblog:</span><span style="color:#24292E">$BUILD_NUMBER </span><span style="color:#032F62">.</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> docker</span><span style="color:#032F62"> ps</span><span style="color:#005CC5"> -a</span><span style="color:#D73A49"> |</span><span style="color:#6F42C1"> grep</span><span style="color:#032F62"> wxblog</span><span style="color:#D73A49"> |</span><span style="color:#6F42C1"> awk</span><span style="color:#032F62"> '{print $1}'</span><span style="color:#D73A49"> |</span><span style="color:#6F42C1"> xargs</span><span style="color:#032F62"> sudo</span><span style="color:#032F62"> docker</span><span style="color:#032F62"> rm</span><span style="color:#005CC5"> -f</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> docker</span><span style="color:#032F62"> run</span><span style="color:#005CC5"> -d</span><span style="color:#005CC5"> -p</span><span style="color:#032F62"> 80:80</span><span style="color:#005CC5"> -p</span><span style="color:#032F62"> 443:443</span><span style="color:#005CC5"> --name</span><span style="color:#032F62"> wxblog_</span><span style="color:#24292E">$BUILD_NUMBER </span><span style="color:#032F62">wxblog:</span><span style="color:#24292E">$BUILD_NUMBER</span></span>
+<span class="line"><span style="color:#6F42C1">sudo</span><span style="color:#032F62"> docker</span><span style="color:#032F62"> images</span><span style="color:#D73A49">|</span><span style="color:#6F42C1">grep</span><span style="color:#032F62"> wxblog</span><span style="color:#D73A49">|</span><span style="color:#6F42C1">awk</span><span style="color:#032F62"> '{print $3 }'</span><span style="color:#D73A49">|</span><span style="color:#6F42C1">xargs</span><span style="color:#032F62"> sudo</span><span style="color:#032F62"> docker</span><span style="color:#032F62"> rmi</span></span></code></pre>
+<p>● DON’T FORGET to run both ports: <code>-p 80:80 -p 443:443</code>.<br>
+<br><br>
+● Congratulation! When you visit <a href="http://www.amazingxu.xyz">http://www.amazingxu.xyz</a> , the website will redirect to <a href="https://www.amazingxu.xyz">https://www.amazingxu.xyz</a> with a secure mark beside your address bar : )</p> </div> <p class="mt-12 font-mono text-[11px] tracking-wide text-muted"> docker </p> <p class="mt-10"> <a href="/blog/" class="font-mono text-[12px] uppercase tracking-[0.15em] text-muted hover:text-body transition-colors">
+← Blog
+</a> </p> </article>  <footer class="mt-auto border-t border-line px-6 pb-10 pt-10"> <div class="mx-auto grid max-w-2xl gap-8 sm:grid-cols-3 sm:gap-6"> <div> <h2 class="mb-4 font-mono text-[12px] font-normal uppercase tracking-[0.15em] text-muted">
+Explore
+</h2> <ul class="flex list-none flex-col gap-2 p-0"> <li> <a href="/" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> Home </a> </li><li> <a href="/blog/" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> Blog </a> </li><li> <a href="/resume/" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> Resume </a> </li><li> <a href="/atom.xml" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> RSS </a> </li> </ul> </div> <div> <h2 class="mb-4 font-mono text-[12px] font-normal uppercase tracking-[0.15em] text-muted">
+Contact
+</h2> <ul class="flex list-none flex-col gap-2 p-0"> <li> <a href="mailto:jameswangx95@gmail.com" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> Email </a> </li><li> <a href="https://github.com/jamesxwang" class="font-mono text-[12px] text-body transition-colors hover:text-ink" target="_blank" rel="noreferrer"> GitHub </a> </li><li> <a href="https://www.linkedin.com/in/james-wang-cn/" class="font-mono text-[12px] text-body transition-colors hover:text-ink" target="_blank" rel="noreferrer"> LinkedIn </a> </li> </ul> </div> <div> <h2 class="mb-4 font-mono text-[12px] font-normal uppercase tracking-[0.15em] text-muted">
+Site
+</h2> <p class="font-mono text-[11px] tracking-wide text-muted">© 2026 James Wang</p> <p class="mt-2 font-serif text-[15px] text-body"><span class="happy-live" data-astro-cid-smffprut>
+Happy  <span class="happy-live-slot" data-happy-live data-astro-cid-smffprut> <span class="happy-live-track" data-astro-cid-smffprut> <span class="happy-live-word" data-astro-cid-smffprut>coding</span><span class="happy-live-word" data-astro-cid-smffprut>wife</span><span class="happy-live-word" data-astro-cid-smffprut>coding</span> </span> </span>, happy life.
+<svg class="happy-live-heart" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-smffprut> <path d="M12 20.2 10.6 19C6.2 15 3.2 12.3 3.2 8.9A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 8.8 1.8c0 3.4-3 6.1-7.4 10.1L12 20.2Z" fill="#e24b4a" data-astro-cid-smffprut></path> </svg> </span> <script type="module">const o=window.matchMedia("(prefers-reduced-motion: reduce)"),p=2600,w=t=>{const n=t.querySelector(".happy-live-track"),s=[...n?.querySelectorAll(".happy-live-word")??[]];if(!n||s.length===0||t.dataset.bound==="true")return;t.dataset.bound="true";const f=s.length-1;let a=0,c=0;const i="0.55s cubic-bezier(0.22, 1, 0.36, 1)",r=(e,l)=>{const h=s[0].offsetHeight,y=s[e].offsetWidth;n.style.transition=l?`transform ${i}`:"none",t.style.transition=l?`width ${i}`:"none",n.style.transform=`translateY(${-e*h}px)`,t.style.width=`${y}px`,a=e},u=()=>{if(o.matches)return;const e=a+1;r(e,!0),e>=f&&n.addEventListener("transitionend",()=>{r(0,!1)},{once:!0})},d=()=>{if(window.clearInterval(c),o.matches){r(0,!1);return}c=window.setInterval(u,p)};r(0,!1),d(),o.addEventListener("change",d),document.fonts?.ready.then(()=>r(a,!1))};document.querySelectorAll("[data-happy-live]").forEach(w);</script> </p> <p class="mt-3 font-mono text-[11px] tracking-wide text-muted"> <span id="busuanzi_container_site_pv">
+PV <span id="busuanzi_value_site_pv"></span> </span> <span class="mx-2">·</span> <span id="busuanzi_container_site_uv">
+UV <span id="busuanzi_value_site_uv"></span> </span> </p> </div> </div> </footer> <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script> <script src="https://s4.cnzz.com/z_stat.php?id=1279680844&web_id=1279680844"></script> </body></html>

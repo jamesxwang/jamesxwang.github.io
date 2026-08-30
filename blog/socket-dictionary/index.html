@@ -1,0 +1,99 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Socket Dictionary"><meta name="generator" content="Astro v5.18.2"><link rel="canonical" href="https://jamesxwang.com/blog/socket-dictionary/"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="alternate" type="application/rss+xml" title="James Wang" href="https://jamesxwang.com/atom.xml"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500&family=Geist+Mono:wght@300;400;500&family=Geist:wght@300;400;500&family=Homemade+Apple&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet"><title>Socket Dictionary · James Wang</title><script>
+      (function () {
+        var key = "theme";
+        var root = document.documentElement;
+        var media = window.matchMedia("(prefers-color-scheme: dark)");
+
+        function stored() {
+          var value = localStorage.getItem(key);
+          return value === "light" || value === "dark" ? value : null;
+        }
+
+        function resolve() {
+          return stored() || (media.matches ? "dark" : "light");
+        }
+
+        function apply(theme) {
+          root.dataset.theme = theme;
+          root.style.colorScheme = theme;
+          var button = document.getElementById("theme-toggle");
+          if (!button) return;
+          var next = theme === "dark" ? "light" : "dark";
+          button.setAttribute("aria-label", "Switch to " + next + " mode");
+          button.setAttribute("aria-pressed", theme === "dark" ? "true" : "false");
+        }
+
+        apply(resolve());
+
+        document.addEventListener("click", function (event) {
+          var target = event.target;
+          if (!target || !target.closest || !target.closest("#theme-toggle")) return;
+          var next = root.dataset.theme === "dark" ? "light" : "dark";
+          localStorage.setItem(key, next);
+          apply(next);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+          apply(resolve());
+        });
+
+        media.addEventListener("change", function (event) {
+          if (stored()) return;
+          apply(event.matches ? "dark" : "light");
+        });
+      })();
+    </script><style>.happy-live-heart[data-astro-cid-smffprut]{display:inline-block;width:.85em;height:.85em;margin:0 0 -.06em .2em;vertical-align:baseline}.happy-live-slot[data-astro-cid-smffprut]{display:inline-block;overflow:hidden;height:1lh;vertical-align:bottom;white-space:nowrap}.happy-live-track[data-astro-cid-smffprut]{display:block;width:max-content}.happy-live-word[data-astro-cid-smffprut]{display:block;width:max-content;height:1lh;line-height:inherit}@media(prefers-reduced-motion:reduce){.happy-live-slot[data-astro-cid-smffprut],.happy-live-track[data-astro-cid-smffprut]{transform:none!important;transition:none!important}}
+</style>
+<link rel="stylesheet" href="/_astro/_slug_.eDjn-bT0.css"></head> <body class="relative flex min-h-screen min-w-0 flex-col overflow-x-clip"> <nav class="z-10 flex w-full items-center px-6 pt-6 mx-auto max-w-2xl justify-between"> <a href="/" class="font-hand text-[16px] leading-5 text-ink hover:text-body transition-colors"> James Wang </a> <div class="flex items-center gap-4 sm:gap-6"> <a href="/blog/" class="font-mono text-[12px] uppercase tracking-[0.15em] transition-colors hover:text-body text-body">
+Blog
+</a> <a href="/resume/" class="font-mono text-[12px] uppercase tracking-[0.15em] transition-colors hover:text-body text-muted">
+Resume
+</a> <button type="button" id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" data-astro-cid-x3pjskd3> <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true" data-astro-cid-x3pjskd3> <path d="M15.4 3.2A8.8 8.8 0 1 0 20.8 14 7.2 7.2 0 0 1 15.4 3.2Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" data-astro-cid-x3pjskd3></path> </svg> <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="3.6" stroke="currentColor" stroke-width="1.6" data-astro-cid-x3pjskd3></circle> <path d="M12 3.2v1.8M12 19v1.8M3.2 12h1.8M19 12h1.8M5.8 5.8l1.3 1.3M16.9 16.9l1.3 1.3M5.8 18.2l1.3-1.3M16.9 7.1l1.3-1.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" data-astro-cid-x3pjskd3></path> </svg> </button>  </div> </nav>  <article class="mx-auto w-full max-w-2xl flex-1 px-6 pb-20 pt-16"> <p class="mb-4 font-mono text-[12px] tracking-wide text-muted"> <time datetime="2018-09-07T00:23:07.000Z">September 7, 2018</time> </p> <h1 class="mb-8 font-serif text-[2rem] leading-tight text-ink">Socket Dictionary</h1> <div class="prose"> <h2 id="introduction">Introduction</h2>
+<p>This is project 1 of <a href="https://handbook.unimelb.edu.au/2018/subjects/comp90015">Distributed Systems (COMP90015) Semester 2, 2018</a>, University of Melbourne. The program implemented a dictionary server and a client through multiple threads and sockets. The dictionary system follows a Client-Server structure with a thread-per-connection architecture. Dictionary datafile uses JSON format with a Java version of 8 and maven version of 3.5 for packaging jar files.</p>
+<h3 id="download-the-source-code">Download the source code</h3>
+<p>Link: <a href="https://github.com/jamesxwang/Dictionary/">https://github.com/jamesxwang/Dictionary/</a></p>
+<!--more-->
+<h3 id="how-to-run">How to run?</h3>
+<ul>
+<li>Server: <code>java -jar Server.jar</code></li>
+<li>Client: <code>java -jar Client.jar &#x3C;optional-host> &#x3C;optional-port></code></li>
+</ul>
+<h3 id="function">Function</h3>
+<p>Once Server established the Server Socket, Clients can connect to the server and query, add, remove words from the dictionary on Server.</p>
+<h2 id="system-structure">System structure</h2>
+<h3 id="class-structure">Class Structure</h3>
+<p>In this design, there are total 15 classes, in which 7 of them are core classes in the Server end, 4 of them are core classes in the Client end, 4 enumeration files for message transmission. Dependencies and the definition between classes are shown below.
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/socket/server-class-diagram.png" alt="server-class-diagram">
+The main class is &#x3C; Server > which extends “JavaFX.Application” for creating a Server GUI for the server. Class &#x3C; ServerController > handles the actions when pressing button on the UI of the server, including establishing and closing the ServerSocket. &#x3C; Handler > is a class that extends Thread, does the loop to monitor new clients connected to the server socket. If there is a client sending a request for connecting to the socket, the server socket accepts it and create a new Thread for each client in the class MessageListener. &#x3C; MessageListener > is a class that extends Thread, handling the requests sent by the clients, such as searching words in the dictionary, adding a new word to the dictionary and deleting an exist word from the dictionary. &#x3C; Information > is a class for getting and setting information from / to the table on the server UI. Class &#x3C; Dictionary > handles between HashMap and the dictionary file, including operations of reading, writing and updating JSON file from / to HashMap. &#x3C; Message > is a class that extends Serializable, setting up a message criterion between client-end. &#x3C; MessageType > and &#x3C; Status > are enumeration files for message types (add, search and delete) and (exist, inexistent and connected), respectively.
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/socket/client-class-diagram.png" alt="client-class-diagram">
+As for the Client end, class &#x3C; Client > is the main class, which extends “JavaFX.Application” for creating the GUI. Class &#x3C; Controller > initializes background animation for the GUI and implements the logic when pressing down buttons on the client-end’s UI. As long as the UI is opened, it sends a request for connecting to the server through stream socket. Once it is connected, &#x3C; MessageListener > handles for messages from the client UI and sends it to the output stream, meanwhile listen to the input stream from the socket. Same as the server, Class &#x3C; Message >, &#x3C; MessageType > and &#x3C; Status > are in client-end are as same as the server. The overall class design of core classes is shown below.
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/socket/overall-class-diagram.png" alt="overall-class-diagram"></p>
+<h3 id="interaction-diagram">Interaction Diagram</h3>
+<p><img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/socket/interaction-diagram.png" alt="interaction-diagram">
+The Interaction diagram is shown above. As long as the Server Socket is established, clients can make requests through their own thread. Server updates the dictionary once it has been changed so that the next query from clients doesn’t need to read the dictionary again.</p>
+<h3 id="flow-chart">Flow Chart</h3>
+<p><img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/socket/flow-chart.png" alt="flow-chart">
+The procedure of the system is shown in the flow chart diagram above. First, the server socket establishes when the start button on server UI is clicked, then creates a thread for listening new connects. Once a client request for connecting to the server, a thread will be created for connecting the client and the server. Message listener in clients and server will be handling the message transmission. The operation of writing new words and definition to the dictionary file is synchronized so that clients can write to the server one by one.</p>
+<h2 id="system-design">System design</h2>
+<h3 id="functional">Functional</h3>
+<p>Clients can query the meaning of a given word, add a new word and remove an existing word, the input and output are clear and users can know exactly what when wrong when errors occur. For the server, it can handle every message been sent by every client and catch all exceptions.</p>
+<h3 id="multi-threads">Multi-Threads</h3>
+<p>The designing for socket-thread I use is thread per connection, i.e. whenever a new connection is created, a thread is created. For the server, one thread will be handling connections between clients and one thread will be handling operations such as searching words in the dictionary, etc.</p>
+<h3 id="graphical-user-interface">Graphical User Interface</h3>
+<p>I designed and implemented a graphical user interface for both Server and Client using JavaFX in Java 8. Among them, a TableView is created for listing operations sent by the Client. The UI snapshot is shown below.
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/socket/Server1.png" alt="Server1">
+<img src="https://cdn.jsdelivr.net/gh/jamesxwang/cdn@master/img/socket/Client1.png" alt="Client1"></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The reasons for designing this socket dictionary system to “Thread-per-connection” are as follows. First of all, it is guaranteed that the main thread will only block on the accept call and will not be blocked by other situations, especially by the specific application processing code such as searching words etc. Second, unlike “Thread-per-request”, it is more convenient for server managing the clients’ requests. But this kind of design can’t guarantee connection concurrency, which means if thousands of people try to connect one server, only the first few of them can connect successful and others would wait until the previous clients disconnect the server.</p> </div> <p class="mt-12 font-mono text-[11px] tracking-wide text-muted"> Socket · Multi-thread </p> <p class="mt-10"> <a href="/blog/" class="font-mono text-[12px] uppercase tracking-[0.15em] text-muted hover:text-body transition-colors">
+← Blog
+</a> </p> </article>  <footer class="mt-auto border-t border-line px-6 pb-10 pt-10"> <div class="mx-auto grid max-w-2xl gap-8 sm:grid-cols-3 sm:gap-6"> <div> <h2 class="mb-4 font-mono text-[12px] font-normal uppercase tracking-[0.15em] text-muted">
+Explore
+</h2> <ul class="flex list-none flex-col gap-2 p-0"> <li> <a href="/" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> Home </a> </li><li> <a href="/blog/" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> Blog </a> </li><li> <a href="/resume/" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> Resume </a> </li><li> <a href="/atom.xml" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> RSS </a> </li> </ul> </div> <div> <h2 class="mb-4 font-mono text-[12px] font-normal uppercase tracking-[0.15em] text-muted">
+Contact
+</h2> <ul class="flex list-none flex-col gap-2 p-0"> <li> <a href="mailto:jameswangx95@gmail.com" class="font-mono text-[12px] text-body transition-colors hover:text-ink"> Email </a> </li><li> <a href="https://github.com/jamesxwang" class="font-mono text-[12px] text-body transition-colors hover:text-ink" target="_blank" rel="noreferrer"> GitHub </a> </li><li> <a href="https://www.linkedin.com/in/james-wang-cn/" class="font-mono text-[12px] text-body transition-colors hover:text-ink" target="_blank" rel="noreferrer"> LinkedIn </a> </li> </ul> </div> <div> <h2 class="mb-4 font-mono text-[12px] font-normal uppercase tracking-[0.15em] text-muted">
+Site
+</h2> <p class="font-mono text-[11px] tracking-wide text-muted">© 2026 James Wang</p> <p class="mt-2 font-serif text-[15px] text-body"><span class="happy-live" data-astro-cid-smffprut>
+Happy  <span class="happy-live-slot" data-happy-live data-astro-cid-smffprut> <span class="happy-live-track" data-astro-cid-smffprut> <span class="happy-live-word" data-astro-cid-smffprut>coding</span><span class="happy-live-word" data-astro-cid-smffprut>wife</span><span class="happy-live-word" data-astro-cid-smffprut>coding</span> </span> </span>, happy life.
+<svg class="happy-live-heart" viewBox="0 0 24 24" aria-hidden="true" data-astro-cid-smffprut> <path d="M12 20.2 10.6 19C6.2 15 3.2 12.3 3.2 8.9A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 8.8 1.8c0 3.4-3 6.1-7.4 10.1L12 20.2Z" fill="#e24b4a" data-astro-cid-smffprut></path> </svg> </span> <script type="module">const o=window.matchMedia("(prefers-reduced-motion: reduce)"),p=2600,w=t=>{const n=t.querySelector(".happy-live-track"),s=[...n?.querySelectorAll(".happy-live-word")??[]];if(!n||s.length===0||t.dataset.bound==="true")return;t.dataset.bound="true";const f=s.length-1;let a=0,c=0;const i="0.55s cubic-bezier(0.22, 1, 0.36, 1)",r=(e,l)=>{const h=s[0].offsetHeight,y=s[e].offsetWidth;n.style.transition=l?`transform ${i}`:"none",t.style.transition=l?`width ${i}`:"none",n.style.transform=`translateY(${-e*h}px)`,t.style.width=`${y}px`,a=e},u=()=>{if(o.matches)return;const e=a+1;r(e,!0),e>=f&&n.addEventListener("transitionend",()=>{r(0,!1)},{once:!0})},d=()=>{if(window.clearInterval(c),o.matches){r(0,!1);return}c=window.setInterval(u,p)};r(0,!1),d(),o.addEventListener("change",d),document.fonts?.ready.then(()=>r(a,!1))};document.querySelectorAll("[data-happy-live]").forEach(w);</script> </p> <p class="mt-3 font-mono text-[11px] tracking-wide text-muted"> <span id="busuanzi_container_site_pv">
+PV <span id="busuanzi_value_site_pv"></span> </span> <span class="mx-2">·</span> <span id="busuanzi_container_site_uv">
+UV <span id="busuanzi_value_site_uv"></span> </span> </p> </div> </div> </footer> <script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script> <script src="https://s4.cnzz.com/z_stat.php?id=1279680844&web_id=1279680844"></script> </body></html>
