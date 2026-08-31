@@ -53,23 +53,51 @@ import { resumes } from "../../content/site";
         <button type="button" id="resume-close" class="resume-viewer-link">Close</button>
       </div>
     </div>
-    <iframe id="resume-frame" class="resume-frame" title="Resume"></iframe>
+    <div class="resume-frame-wrap">
+      <iframe id="resume-frame" class="resume-frame" title="Resume"></iframe>
+    </div>
   </dialog>
 </Base>
 
 <script>
   const dialog = document.getElementById("resume-viewer") as HTMLDialogElement | null;
   const frame = document.getElementById("resume-frame") as HTMLIFrameElement | null;
+  const wrap = dialog?.querySelector<HTMLElement>(".resume-frame-wrap") ?? null;
   const titleEl = document.getElementById("resume-viewer-title");
   const download = document.getElementById("resume-download") as HTMLAnchorElement | null;
   const closeBtn = document.getElementById("resume-close");
+
+  const isNarrow = () => window.matchMedia("(max-width: 720px)").matches;
+
+  const pdfHref = (src: string) => {
+    const url = new URL(src, location.origin);
+    if (!isNarrow()) url.hash = "view=FitH";
+    return `${url.pathname}${url.search}${url.hash}`;
+  };
+
+  const fitFrame = () => {
+    if (!frame || !wrap) return;
+    frame.style.transform = "";
+    frame.style.width = "100%";
+    frame.style.height = "100%";
+    if (!isNarrow()) return;
+    const avail = wrap.clientWidth;
+    if (avail < 32) return;
+    const scale = Math.min(1, avail / 794);
+    if (scale >= 0.99) return;
+    frame.style.width = `${100 / scale}%`;
+    frame.style.height = `${100 / scale}%`;
+    frame.style.transform = `scale(${scale})`;
+    frame.style.transformOrigin = "top left";
+  };
 
   const openViewer = (src: string, title: string) => {
     if (!dialog || !frame || !titleEl || !download) return;
     titleEl.textContent = title;
     download.href = src;
-    frame.src = src;
+    frame.src = pdfHref(src);
     dialog.showModal();
+    requestAnimationFrame(() => requestAnimationFrame(fitFrame));
   };
 
   const closeViewer = () => {
@@ -104,6 +132,10 @@ import { resumes } from "../../content/site";
     `[data-resume-id="${CSS.escape(location.hash.slice(1))}"]`,
   );
   hashed?.click();
+
+  window.addEventListener("resize", () => {
+    if (dialog?.open) fitFrame();
+  });
 </script>
 
 <style>
@@ -169,8 +201,24 @@ import { resumes } from "../../content/site";
     margin: auto;
     padding: 0;
     border: none;
+    overflow: hidden;
     background: var(--page);
     box-shadow: 0 18px 50px rgb(0 0 0 / 0.16);
+  }
+
+  .resume-viewer[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 720px) {
+    .resume-viewer {
+      width: 100vw;
+      height: 100dvh;
+      max-width: none;
+      max-height: none;
+      margin: 0;
+    }
   }
 
   .resume-viewer::backdrop {
@@ -182,11 +230,23 @@ import { resumes } from "../../content/site";
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    flex-shrink: 0;
     padding: 0.85rem 1.1rem;
     border-bottom: 1px solid var(--color-line);
   }
 
+  @media (max-width: 720px) {
+    .resume-viewer-bar {
+      padding: 0.75rem 0.9rem;
+      padding-top: max(0.75rem, env(safe-area-inset-top));
+    }
+  }
+
   .resume-viewer-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.12em;
@@ -216,10 +276,18 @@ import { resumes } from "../../content/site";
     color: var(--color-body);
   }
 
+  .resume-frame-wrap {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    background: var(--color-soft);
+  }
+
   .resume-frame {
     display: block;
     width: 100%;
-    height: calc(100% - 3.1rem);
+    height: 100%;
     border: 0;
     background: var(--color-soft);
   }
